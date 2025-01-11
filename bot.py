@@ -1,8 +1,8 @@
 import interactions
 from interactions import Intents, listen, slash_command, SlashContext, SlashCommand
-from interactions.api.events import Startup
+from interactions.api.events import Startup, GuildJoin, GuildLeft
 
-from os import environ, path, mkdir
+from os import environ, path, mkdir, remove
 import json
 
 from dotenv import load_dotenv
@@ -38,6 +38,37 @@ def updateGuildInteractions(id: str):
         async def slash_command_function(context: SlashContext):
             await context.send(command_return_text)
         bot.add_command(slash_command_function)
+
+def initializeGuild(id: str):
+    guildDir = path.join(LOCAL_DIR, 'guilds', id)
+    commandsFilePath = path.join(guildDir, 'commands.json')
+
+    if path.isdir(guildDir):
+        return
+    elif path.isfile(commandsFilePath):
+        return
+    
+    mkdir(path.join(LOCAL_DIR, 'guilds', id))
+    with open(commandsFilePath, 'w+') as guildCommandConfig:
+        guildCommandConfig.write("[]")
+
+def destroyGuildData(id: str):
+    guildDir = path.join(LOCAL_DIR, 'guilds', id)
+    if not path.isdir(guildDir):
+        return
+    remove(guildDir)
+
+@listen(GuildJoin)
+async def guild_joined(event: GuildJoin):
+    if not bot.is_ready:
+        return
+    initializeGuild(str(event.guild_id))
+
+@listen(GuildLeft)
+async def guild_left(event: GuildLeft):
+    if not bot.is_ready:
+        return
+    destroyGuildData(str(event.guild_id))
 
 @listen(Startup)
 async def bot_started():

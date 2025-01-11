@@ -1,0 +1,7 @@
+[
+    {
+        "name": "whatisthis",
+        "description": "An empty .json to initialize this directory. This is a valid commands.json.",
+        "command_return_text": "nothing to see here!"
+    }
+]

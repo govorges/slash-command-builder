@@ -54,6 +54,8 @@ async def bot_started():
             guildCommandConfig.write("[]")
     await bot.synchronise_interactions(scopes = [guild.id for guild in bot.guilds])
 
+    print("Bot started & guild interactions have been synced with Discord.")
+
 @slash_command(name = "help", description = "List commands for this guild")
 async def help_command(context: SlashContext):
     guildCommands: list[SlashCommand] = []
@@ -76,4 +78,5 @@ async def reload_commands(context: SlashContext):
     await bot.synchronise_interactions(scopes = [context.guild_id], delete_commands = guildCommands)
     await context.send("This guild's command's have been reloaded.")
 
-bot.start()
+if __name__ == "__main__":   
+    bot.start()

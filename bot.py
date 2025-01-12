@@ -39,7 +39,7 @@ def updateGuildInteractions(id: str):
             await context.send(command_return_text)
         bot.add_command(slash_command_function)
 
-def initializeGuild(id: str):
+def createGuildData(id: str):
     guildDir = path.join(LOCAL_DIR, 'guilds', id)
     commandsFilePath = path.join(guildDir, 'commands.json')
 
@@ -62,7 +62,7 @@ def destroyGuildData(id: str):
 async def guild_joined(event: GuildJoin):
     if not bot.is_ready:
         return
-    initializeGuild(str(event.guild_id))
+    createGuildData(str(event.guild_id))
 
 @listen(GuildLeft)
 async def guild_left(event: GuildLeft):

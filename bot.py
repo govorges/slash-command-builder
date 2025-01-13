@@ -17,7 +17,8 @@ if BOT_TOKEN is None:
 bot = interactions.Client( 
     token = BOT_TOKEN,
     intents = Intents.GUILDS,
-    delete_unused_application_cmds = False
+    delete_unused_application_cmds = False,
+    disable_dm_commands = True
 )
 del BOT_TOKEN
 
@@ -96,7 +97,7 @@ async def help_command(context: SlashContext):
         guildCommands.append(f"/{command.name} - {command.description}")
     await context.send("\n".join(guildCommands))
 
-@slash_command(name = "reload", description="Reload this guild's commands.")
+@slash_command(name = "reload", description = "Reload this guild's commands.")
 async def reload_commands(context: SlashContext):
     updateGuildInteractions(str(context.guild_id))
     

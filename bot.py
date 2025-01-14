@@ -6,12 +6,15 @@ from os import environ, path, mkdir, remove
 import json
 
 from dotenv import load_dotenv
-load_dotenv()
+dotenv_loaded = load_dotenv()
 
 LOCAL_DIR = path.dirname(path.realpath(__file__))
 
 
 BOT_TOKEN = environ.get("BOT_TOKEN")
+if not dotenv_loaded and BOT_TOKEN is None: # It's possible for $BOT_TOKEN to be set without a .env being present (docker deployments and such)
+    
+    raise EnvironmentError("No environment file was found!")
 if BOT_TOKEN is None:
     raise EnvironmentError("BOT_TOKEN was not set in .env")
 bot = interactions.Client( 

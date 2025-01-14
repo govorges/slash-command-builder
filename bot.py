@@ -13,17 +13,16 @@ LOCAL_DIR = path.dirname(path.realpath(__file__))
 
 BOT_TOKEN = environ.get("BOT_TOKEN")
 if not dotenv_loaded and BOT_TOKEN is None: # It's possible for $BOT_TOKEN to be set without a .env being present (docker deployments and such)
-    
     raise EnvironmentError("No environment file was found!")
 if BOT_TOKEN is None:
     raise EnvironmentError("BOT_TOKEN was not set in .env")
+
 bot = interactions.Client( 
     token = BOT_TOKEN,
     intents = Intents.GUILDS,
     delete_unused_application_cmds = False,
     disable_dm_commands = True
 )
-del BOT_TOKEN
 
 def updateGuildInteractions(id: str):
     '''A function to construct & register a list of commands defined in guilds/<id>/commands.json'''
